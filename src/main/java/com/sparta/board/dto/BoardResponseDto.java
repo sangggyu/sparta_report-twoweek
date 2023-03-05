@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 public class BoardResponseDto {
     private String title;
+//    private Long userId;
     private String username;
-    private String password;
+//    private String password;
     private String contents;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
@@ -23,5 +24,6 @@ public class BoardResponseDto {
         this.createAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
         this.id = board.getId();
+//        this.userId = board.getUserId();
     }
 }
