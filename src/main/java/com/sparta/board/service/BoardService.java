@@ -42,8 +42,8 @@ public class BoardService {
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
             );
-            String username = user.getUsername();
-            Board board = boardRepository.saveAndFlush(new Board(boardRequestDto, username));
+
+            Board board = boardRepository.saveAndFlush(new Board(boardRequestDto, user));
 
             return new BoardResponseDto(board);
         } else {
@@ -66,43 +66,42 @@ public class BoardService {
     //선택한 게시물 조회
     @Transactional
     public BoardResponseDto searchBoard(Long id) {
-        Board board = checkboard(id);
+        Board board = getBoard(id);
         return new BoardResponseDto(board);
     }
 //    선택한 게시물 수정
     @Transactional
-    public Board update(Long id, BoardRequestDto boardRequestDto, HttpServletRequest request) {
+    public BoardResponseDto update(Long id, BoardRequestDto boardRequestDto, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
 
-        Board board = checkboard(id);
+        Board board = getBoard(id);
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
+        if (token != null) { //변수가 null이 아닐 경우, JWT 유효성 검사를 합니다.
+            if (jwtUtil.validateToken(token)) { //JwtUtil 객체는 JWT 토큰 생성 및 검증에 사용
+                claims = jwtUtil.getUserInfoFromToken(token); // 유효한 토큰일 경우 해당 토큰에 포함한 Claims 정보를 추출 
+            } else { //'claims' 은 토큰에 포함된 정보를 나타냅니다.
                 throw new IllegalArgumentException("Token Error");
-            }
+            }//'유효하지 않은 토큰일 경우, 'IllegalArgumentException' 예외를 발생시킴
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-            );
-
-            if (!(board.getUsername().equals(user.getUsername()))) {
-                throw new IllegalArgumentException("해당 사용자가 아니면 게시글을 수정할 수 없습니다.");
-            }
-            board.update(boardRequestDto);
-            return board;
-        } return null;
+            );//'userRepository' 에서 'findByUsername()' 메소드를 사용하여 사용자 정보를 가져옵니다.
+            //'claims.getSubject()'는 토큰에 저장된 사용자 (username)을 의미합니다.  사용자 정보가 없는 경우 예외발생 'IllegalArgumentException'
+            if (board.getUser().getId().equals(user.getId()))
+                //'board' 객체의 작성자(username)와 토큰에서 추출한 사용자 이름 (username)이 일치하지 않을 경우 'IllegalArgumentException' 예외발생
+                board.update(boardRequestDto);
+            return new BoardResponseDto(board);
+        } else {
+            return null;
+        }
     }
-//
-//
-////
+
     @Transactional
     public ResponseEntity delete(Long id, BoardRequestDto boardRequestDto, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
 
-        Board board = checkboard(id);
+        Board board = getBoard(id);
 
         if (token != null) {
             if (jwtUtil.validateToken(token)) {
@@ -114,7 +113,7 @@ public class BoardService {
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
             );
 
-            if (board.getUsername().equals(user.getUsername())) {
+            if (board.getId().equals(user.getId())) {
                 boardRepository.deleteById(id);
                 ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("게시글 삭제 성공!", HttpStatus.OK.value());
 
@@ -125,7 +124,7 @@ public class BoardService {
     }
 
 
-    private Board checkboard(Long id) {
+    private Board getBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );

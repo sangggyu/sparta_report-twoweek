@@ -38,12 +38,14 @@ public class UserService {
             userRepository.save(user);
 
             ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("회원가입 성공!", HttpStatus.OK.value());
-
             return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
         }
-
     }
-
+//ResponseMsgStatusCodeDto는 HTTP 응답(Response)에 대한 정보를 담고 있는 클래스 해당 코드에서는 "회원가입 성공!" 메시지와 HttpStatus.OK.value() (즉, 200) 상태 코드를 담고 있는 객체를 생성
+//ResponseEntity 객체를 사용하여 HTTP 응답을 생성합니다. HttpStatus.OK는 클라이언트 요청이 성공적으로 처리되었을 경우 사용되는 HTTP 상태 코드입니다. responseMsgStatusCodeDto 객체를 응답 본문(Body)으로 설정합니다.
+//ResponseEntity.status(HttpStatus.OK)는 HTTP 상태 코드가 200 (즉, 성공)인 응답을 생성합니다.
+//body() 메소드는 응답 본문을 설정합니다. 이 때, responseMsgStatusCodeDto 객체가 JSON 형태로 변환되어 응답 본문에 포함됩니다.
+//최종적으로, ResponseEntity 객체를 반환하여 클라이언트에게 HTTP 응답을 보냅니다.
 
 
 

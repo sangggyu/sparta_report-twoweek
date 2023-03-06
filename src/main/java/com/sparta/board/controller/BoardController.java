@@ -41,7 +41,7 @@ public class BoardController {
 
     //게시물 수정
     @PutMapping("/boards/{id}")
-    public Board update (@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto, HttpServletRequest request){
+    public BoardResponseDto update (@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto, HttpServletRequest request){
         return boardService.update(id, boardRequestDto, request);
     }
 //

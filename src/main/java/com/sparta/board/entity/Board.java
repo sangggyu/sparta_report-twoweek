@@ -3,17 +3,14 @@ package com.sparta.board.entity;
 import com.sparta.board.dto.BoardRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class Board extends Timestamped{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
 
@@ -21,18 +18,22 @@ public class Board extends Timestamped{
     private String title;
 
     @Column(nullable = false)
-    private String contents;
-
-
-    @Column
     private String username;
 
+    @Column(nullable = false)
+    private String contents;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User user;
 
 
-    public Board(BoardRequestDto requestDto, String username) {
+    public Board(BoardRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
+        this.username = user.getUsername();
         this.contents = requestDto.getContents();
-        this.username = username;
+        this.user = user;
+
     }
 
 

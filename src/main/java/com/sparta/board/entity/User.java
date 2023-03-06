@@ -3,8 +3,7 @@ package com.sparta.board.entity;
 import com.sparta.board.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import org.springframework.validation.annotation.Validated;
+
 
 import javax.persistence.*;
 
@@ -24,8 +23,10 @@ public class User {
     private String password;
 
 
+
     public User(SignupRequestDto signupRequestDto) {
         this.username = signupRequestDto.getUsername();
         this.password = signupRequestDto.getPassword();
+
     }
 }
