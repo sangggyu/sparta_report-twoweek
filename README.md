@@ -2,4 +2,5 @@
 https://www.notion.so/API-6ae7f77edfe142b7817208ea74196851?pvs=4
 
 
-![image](https://user-images.githubusercontent.com/124053404/223043286-5114e893-8ad1-4e31-a858-fc58b839bda2.png)
+![image](https://user-images.githubusercontent.com/124053404/223045345-fe5a8a58-dc0b-4b74-824c-0cf340be74fe.png)
+
