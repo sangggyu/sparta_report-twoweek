@@ -2,11 +2,14 @@ package com.sparta.board.service;
 
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
+import com.sparta.board.dto.CommentResponseDto;
 import com.sparta.board.dto.ResponseMsgStatusCodeDto;
 import com.sparta.board.entity.Board;
+import com.sparta.board.entity.Comment;
 import com.sparta.board.entity.User;
 import com.sparta.board.jwt.JwtUtil;
 import com.sparta.board.repository.BoardRepository;
+import com.sparta.board.repository.CommentRepository;
 import com.sparta.board.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
     //게시글 작성
@@ -50,18 +54,34 @@ public class BoardService {
             return null;
         }
     }
+//    //게시글 전체 조회
+//    @Transactional(readOnly = true)
+//    public List<BoardResponseDto> gatBoard() {
+//        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
+//        List<BoardResponseDto> boardResponseDto = new ArrayList<>();
+//            for (Board boards : boardList) {
+//                BoardResponseDto boardDto = new BoardResponseDto(boards);
+//                boardResponseDto.add(boardDto);
+//            }
+//        return boardResponseDto;
+//    }
+
+    //게시글 전체 조회2
 
     @Transactional(readOnly = true)
-    public List<BoardResponseDto> gatBoard() {
-        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
+    public List<BoardResponseDto> getBoard() {
         List<BoardResponseDto> boardResponseDto = new ArrayList<>();
-        for (Board board : boardList) {
-            BoardResponseDto boardDto = new BoardResponseDto(board);
-            boardResponseDto.add(boardDto);
-        }
-        return boardResponseDto;
+        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
 
+        for(Board board : boardList){
+            List<CommentResponseDto> commentlist = new ArrayList<>();
+                for (Comment comment : board.getComments()){
+                    commentlist.add(new CommentResponseDto(comment));
+            }
+                boardResponseDto.add(new BoardResponseDto(board, commentlist));
+        }return boardResponseDto;
     }
+
 
     //선택한 게시물 조회
     @Transactional

@@ -2,6 +2,7 @@ package com.sparta.board.controller;
 
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
+
 import com.sparta.board.entity.Board;
 import com.sparta.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Validated
@@ -30,8 +32,9 @@ public class BoardController {
     //게시물 전체조회
     @GetMapping("/boards")
     public List<BoardResponseDto> gatBoard() {
-        return boardService.gatBoard();
+        return boardService.getBoard();
     }
+
 
     //게시물 선택조회
     @GetMapping("/boards/{id}")
