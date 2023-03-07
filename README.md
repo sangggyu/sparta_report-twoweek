@@ -5,7 +5,7 @@ https://www.notion.so/API-6ae7f77edfe142b7817208ea74196851?pvs=4
 https://documenter.getpostman.com/view/26066949/2s93JnW7XR
 
 
-![image](https://user-images.githubusercontent.com/124053404/223120280-08b5e21c-a71c-4489-85a4-5a17ebef5fcc.png)
+![image](https://user-images.githubusercontent.com/124053404/223406012-b2299655-e50b-45d9-9535-07b5e79b3bb9.png)
 
 
 
