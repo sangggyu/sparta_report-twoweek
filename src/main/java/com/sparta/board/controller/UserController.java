@@ -3,6 +3,9 @@ package com.sparta.board.controller;
 import com.sparta.board.dto.LoginRequestDto;
 import com.sparta.board.dto.SignupRequestDto;
 import com.sparta.board.service.UserService;
+import com.sparta.board.status.CustomException;
+import com.sparta.board.status.ErrorCode;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +25,11 @@ public class UserController {
 
     public final UserService userService;
 
-
+    @ApiOperation(value="회원가입 테스트", notes="회원가입 테스트")
     @PostMapping("/signup")
     public ResponseEntity signup(@Validated @RequestBody  SignupRequestDto signupRequestDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+            throw new CustomException(ErrorCode.NOT_FOUND_SIGNUP_USER);
         }
             return userService.signup(signupRequestDto);
     }
@@ -36,12 +39,9 @@ public class UserController {
 //else 조건문이 없으므로, 유효성 검증에 성공했을 경우 userService.signup(signupRequestDto) 메소드가 호출되어 회원가입 처리가 됩니다.
 //이 메소드는 signupRequestDto 객체를 매개변수로 받아 새로운 사용자를 데이터베이스에 추가하고, 결과에 따라 적절한 HTTP 응답을 반환합니다.
 
-
+    @ApiOperation(value="로그인 테스트", notes="로그인 테스트")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
-        }
+    public ResponseEntity login(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
 

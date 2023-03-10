@@ -3,6 +3,7 @@ package com.sparta.board.dto;
 import com.sparta.board.entity.Board;
 import com.sparta.board.entity.Comment;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,7 +19,10 @@ public class BoardResponseDto {
     private String username;
 //    private String password;
     private String content;
+
+
     private LocalDateTime createAt;
+
     private LocalDateTime modifiedAt;
 
     private List<CommentResponseDto> commentList = new ArrayList<>();
@@ -32,19 +36,19 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
-//        for(Comment comment : board.getComments()){
-//            commentList.add(new CommentResponseDto(comment));
-//        }
+        for(Comment comment : board.getComments()){
+            commentList.add(new CommentResponseDto(comment));
+        }
     }
 
 
-    public BoardResponseDto(Board board, List<CommentResponseDto> commentlist) {
-        this.id = board.getId();
-        this.title = board.getTitle();
-        this.username = board.getUsername();
-        this.content = board.getContent();
-        this.createAt = board.getCreatedAt();
-        this.modifiedAt = board.getModifiedAt();
-        this.commentList = commentlist;
-    }
+//    public BoardResponseDto(Board board, List<CommentResponseDto> commentlist) {
+//        this.id = board.getId();
+//        this.title = board.getTitle();
+//        this.username = board.getUsername();
+//        this.content = board.getContent();
+//        this.createAt = board.getCreatedAt();
+//        this.modifiedAt = board.getModifiedAt();
+//        this.commentList = commentlist;
+//    }
 }

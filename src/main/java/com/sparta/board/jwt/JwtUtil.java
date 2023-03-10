@@ -1,6 +1,12 @@
 package com.sparta.board.jwt;
 
 
+import com.sparta.board.entity.User;
+import com.sparta.board.entity.UserEnum;
+import com.sparta.board.repository.BoardRepository;
+import com.sparta.board.repository.UserRepository;
+import com.sparta.board.status.CustomException;
+import com.sparta.board.status.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -20,6 +26,10 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
+
+    private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
+//    private final CommentRepository commentRepository;
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
@@ -47,13 +57,13 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username) {
+    public String createToken(String username, UserEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
-//                        .claim(AUTHORIZATION_KEY, role)
+                        .claim(AUTHORIZATION_KEY, role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
@@ -81,5 +91,61 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    public User getUserInfo(HttpServletRequest request) {
+        String token = resolveToken(request);
+        Claims claims;
+        User user;
+
+        if (token != null) {
+            // JWT의 유효성을 검증하여 올바른 JWT인지 확인
+            if (validateToken(token)) {
+                // 토큰에서 사용자 정보 가져오기
+                claims = getUserInfoFromToken(token);
+            } else {
+                throw new CustomException(ErrorCode.INVALID_TOKEN);
+            }
+
+            // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+            user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+            );
+            return user;
+        }
+        throw new CustomException(ErrorCode.NOT_TOKEN);
+    }
+    // 관리자 계정만 모든 게시글 수정, 삭제 가능
+//    public Board getBoardAdminInfo(Long id, User user) {
+//        Board board;
+//        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+//            // 관리자 계정이기 때문에 게시글 아이디만 일치하면 수정,삭제 가능
+//            board = boardRepository.findById(id).orElseThrow(
+//                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ADMIN)
+//            );
+//        } else {
+//            // 사용자 계정이므로 게시글 아이디와 작성자 이름이 있는지 확인하고 있으면 수정,삭제 가능
+//            board = boardRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
+//                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
+//            );
+//        }
+//        return board;
+//    }
+
+    // 관리자 계정만 모든 댓글 수정, 삭제 가능
+//    public Comment getCommentAdminInfo(Long id, User user) {
+//        Comment comment;
+//        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+//            // 관리자 계정이기 때문에 게시글 아이디만 일치하면 수정,삭제 가능
+//            comment = commentRepository.findById(id).orElseThrow(
+//                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN)
+//            );
+//        } else {
+//            // 사용자 계정이므로 게시글 아이디와 작성자 이름이 있는지 확인하고 있으면 수정,삭제 가능
+//            comment = commentRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
+//                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT)
+//            );
+//        }
+//        return comment;
+//    }
 
 }

@@ -4,8 +4,11 @@ import com.sparta.board.dto.LoginRequestDto;
 import com.sparta.board.dto.ResponseMsgStatusCodeDto;
 import com.sparta.board.dto.SignupRequestDto;
 import com.sparta.board.entity.User;
+import com.sparta.board.entity.UserEnum;
 import com.sparta.board.jwt.JwtUtil;
 import com.sparta.board.repository.UserRepository;
+import com.sparta.board.status.CustomException;
+import com.sparta.board.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-//    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    private static final String ADMIN_TOKEN = "ABCD";
 
     @Transactional
     public ResponseEntity<ResponseMsgStatusCodeDto> signup(SignupRequestDto signupRequestDto) {
@@ -32,15 +35,24 @@ public class UserService {
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
-        } else {
-            User user = new User(signupRequestDto);
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        }
+        // 사용자 ROLE 확인
+        UserEnum role = UserEnum.USER;
+        if (signupRequestDto.isAdmin()) {
+            if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserEnum.ADMIN;
+        }
+
+            User user = new User(signupRequestDto, role);
             userRepository.save(user);
 
             ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("회원가입 성공!", HttpStatus.OK.value());
             return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
         }
-    }
+
 //ResponseMsgStatusCodeDto는 HTTP 응답(Response)에 대한 정보를 담고 있는 클래스 해당 코드에서는 "회원가입 성공!" 메시지와 HttpStatus.OK.value() (즉, 200) 상태 코드를 담고 있는 객체를 생성
 //ResponseEntity 객체를 사용하여 HTTP 응답을 생성합니다. HttpStatus.OK는 클라이언트 요청이 성공적으로 처리되었을 경우 사용되는 HTTP 상태 코드입니다. responseMsgStatusCodeDto 객체를 응답 본문(Body)으로 설정합니다.
 //ResponseEntity.status(HttpStatus.OK)는 HTTP 상태 코드가 200 (즉, 성공)인 응답을 생성합니다.
@@ -56,15 +68,15 @@ public class UserService {
 
         // 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         // 비밀번호 확인
         if(!user.getPassword().equals(password)){
-            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw  new CustomException(ErrorCode.NOT_FOUND_USER);
         }
         ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("로그인 성공!", HttpStatus.OK.value());
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
     }
