@@ -33,12 +33,6 @@ public class UserController {
         }
             return userService.signup(signupRequestDto);
     }
-//bindingResult 객체가 유효성 검증(Validation) 결과를 담고 있습니다. 만약 해당 객체에 에러가 있으면 hasErrors() 메소드가 true를 반환합니다.
-//따라서, if 조건문은 유효성 검증에 실패했을 경우를 처리합니다.
-//ResponseEntity 객체를 사용하여 HTTP 응답(Response)을 생성합니다. HttpStatus.BAD_REQUEST는 클라이언트 요청이 부적절할 경우 사용되는 HTTP 상태 코드입니다. bindingResult.getAllErrors()는 모든 에러 정보를 반환합니다.
-//else 조건문이 없으므로, 유효성 검증에 성공했을 경우 userService.signup(signupRequestDto) 메소드가 호출되어 회원가입 처리가 됩니다.
-//이 메소드는 signupRequestDto 객체를 매개변수로 받아 새로운 사용자를 데이터베이스에 추가하고, 결과에 따라 적절한 HTTP 응답을 반환합니다.
-
     @ApiOperation(value="로그인 테스트", notes="로그인 테스트")
     @PostMapping("/login")
     public ResponseEntity login(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {

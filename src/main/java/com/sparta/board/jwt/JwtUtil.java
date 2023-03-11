@@ -114,38 +114,5 @@ public class JwtUtil {
         }
         throw new CustomException(ErrorCode.NOT_TOKEN);
     }
-    // 관리자 계정만 모든 게시글 수정, 삭제 가능
-//    public Board getBoardAdminInfo(Long id, User user) {
-//        Board board;
-//        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
-//            // 관리자 계정이기 때문에 게시글 아이디만 일치하면 수정,삭제 가능
-//            board = boardRepository.findById(id).orElseThrow(
-//                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ADMIN)
-//            );
-//        } else {
-//            // 사용자 계정이므로 게시글 아이디와 작성자 이름이 있는지 확인하고 있으면 수정,삭제 가능
-//            board = boardRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-//                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
-//            );
-//        }
-//        return board;
-//    }
-
-    // 관리자 계정만 모든 댓글 수정, 삭제 가능
-//    public Comment getCommentAdminInfo(Long id, User user) {
-//        Comment comment;
-//        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
-//            // 관리자 계정이기 때문에 게시글 아이디만 일치하면 수정,삭제 가능
-//            comment = commentRepository.findById(id).orElseThrow(
-//                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN)
-//            );
-//        } else {
-//            // 사용자 계정이므로 게시글 아이디와 작성자 이름이 있는지 확인하고 있으면 수정,삭제 가능
-//            comment = commentRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-//                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT)
-//            );
-//        }
-//        return comment;
-//    }
 
 }

@@ -45,7 +45,7 @@ public class CommentService {
 
         User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
-        if (!(comment.getUser().getId() == user.getId() || user.getRole().equals(UserEnum.ADMIN))) {
+        if (!(comment.getUser().getId().equals(user.getId())  || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
         } else {
             comment.updateComment(commentRequestDto);
@@ -90,7 +90,6 @@ public class CommentService {
 //                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN)
 //            );
 //        } else {
-////            String a = "a";
 //            // 사용자 계정이므로 게시글 아이디와 작성자 이름이 있는지 확인하고 있으면 수정,삭제 가능
 //            comment = commentRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
 //                    () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT)
