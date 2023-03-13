@@ -5,6 +5,7 @@ import com.sparta.board.entity.User;
 import com.sparta.board.entity.UserEnum;
 import com.sparta.board.repository.BoardRepository;
 import com.sparta.board.repository.UserRepository;
+import com.sparta.board.security.UserDetailsServiceImpl;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 import io.jsonwebtoken.*;
@@ -13,6 +14,9 @@ import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -113,6 +117,14 @@ public class JwtUtil {
             return user;
         }
         throw new CustomException(ErrorCode.NOT_TOKEN);
+    }
+    private final UserDetailsServiceImpl userDetailsService;
+
+
+    // 인증 객체 생성
+    public Authentication createAuthentication(String username) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
 }

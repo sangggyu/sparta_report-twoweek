@@ -1,7 +1,7 @@
 package com.sparta.board.service;
 
 import com.sparta.board.dto.LoginRequestDto;
-import com.sparta.board.dto.ResponseMsgStatusCodeDto;
+import com.sparta.board.dto.SecurityExceptionDto;
 import com.sparta.board.dto.SignupRequestDto;
 import com.sparta.board.entity.User;
 import com.sparta.board.entity.UserEnum;
@@ -12,6 +12,8 @@ import com.sparta.board.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +26,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     private static final String ADMIN_TOKEN = "ABCD";
 
+
     @Transactional
-    public ResponseEntity<ResponseMsgStatusCodeDto> signup(SignupRequestDto signupRequestDto) {
+    public ResponseEntity<SecurityExceptionDto> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -47,10 +51,11 @@ public class UserService {
         }
 
             User user = new User(signupRequestDto, role);
+            user.hashPassword(passwordEncoder);
             userRepository.save(user);
 
-            ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("회원가입 성공!", HttpStatus.OK.value());
-            return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
+            SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("회원가입 성공!", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
 
 //ResponseMsgStatusCodeDto는 HTTP 응답(Response)에 대한 정보를 담고 있는 클래스 해당 코드에서는 "회원가입 성공!" 메시지와 HttpStatus.OK.value() (즉, 200) 상태 코드를 담고 있는 객체를 생성
@@ -62,7 +67,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseMsgStatusCodeDto> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<SecurityExceptionDto> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
@@ -72,12 +77,12 @@ public class UserService {
         );
 
         // 비밀번호 확인
-        if(!user.getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw  new CustomException(ErrorCode.NOT_FOUND_USER);
         }
-        ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("로그인 성공!", HttpStatus.OK.value());
+        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("로그인 성공!", HttpStatus.OK.value());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
+        return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
     }
 }

@@ -14,18 +14,18 @@ public class CommentResponseDto {
 
     private String comment;
 
-    private LocalDateTime createAt;
-
-    private LocalDateTime modifiedAt;
-
     private String username;
+
+    private String modifiedAt;
+
+    private String createAt;
 
 
 
     public CommentResponseDto(Comment comment) {
         this.comment = comment.getComment();
-        this.createAt = comment.getCreatedAt();
-        this.modifiedAt = comment.getModifiedAt();
+        this.createAt = comment.getcreatedAt();
+        this.modifiedAt = comment.getmodifiedAt();
         this.username = comment.getUser().getUsername();
         this.id = comment.getId();
 

@@ -4,6 +4,8 @@ import com.sparta.board.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserEnum role;
@@ -42,4 +46,9 @@ public class User {
         this.role = role;
 
     }
+    public void hashPassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+
+
 }

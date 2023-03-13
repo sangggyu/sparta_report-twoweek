@@ -21,9 +21,9 @@ public class BoardResponseDto {
     private String content;
 
 
-    private LocalDateTime createAt;
+    private String createAt;
 
-    private LocalDateTime modifiedAt;
+    private String modifiedAt;
 
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
@@ -34,8 +34,8 @@ public class BoardResponseDto {
         this.title = board.getTitle();
         this.username = board.getUsername();
         this.content = board.getContent();
-        this.createAt = board.getCreatedAt();
-        this.modifiedAt = board.getModifiedAt();
+        this.createAt = board.getcreatedAt();
+        this.modifiedAt = board.getmodifiedAt();
         for(Comment comment : board.getComments()){
             commentList.add(new CommentResponseDto(comment));
         }

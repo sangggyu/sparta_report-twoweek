@@ -4,11 +4,13 @@ import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
 
 
+import com.sparta.board.security.UserDetailsImpl;
 import com.sparta.board.service.BoardService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,8 @@ public class BoardController {
     //게시물작성
     @ApiOperation(value="게시물 작성 테스트", notes="게시물 작성 테스트")
     @PostMapping("/boards")
-    public BoardResponseDto createBoard (@RequestBody BoardRequestDto requestDto, HttpServletRequest request){
+    public BoardResponseDto createBoard
+    (@RequestBody BoardRequestDto requestDto, HttpServletRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return boardService.createBoard(requestDto, request);
     }
 //    게시물 전체조회
@@ -63,11 +66,5 @@ public class BoardController {
     public ResponseEntity delete (@PathVariable Long id, HttpServletRequest request) {
         return boardService.delete(id, request);
     }
-
-
-
-
-
-
 
 }

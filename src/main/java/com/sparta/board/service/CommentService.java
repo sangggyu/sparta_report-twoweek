@@ -2,7 +2,7 @@ package com.sparta.board.service;
 
 import com.sparta.board.dto.CommentRequestDto;
 import com.sparta.board.dto.CommentResponseDto;
-import com.sparta.board.dto.ResponseMsgStatusCodeDto;
+import com.sparta.board.dto.SecurityExceptionDto;
 import com.sparta.board.entity.Board;
 import com.sparta.board.entity.Comment;
 import com.sparta.board.entity.User;
@@ -62,8 +62,8 @@ public class CommentService {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
         } else {
             commentRepository.deleteById(id);
-            ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("댓글 삭제 성공!", HttpStatus.OK.value());
-            return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
+            SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("댓글 삭제 성공!", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
     }
 

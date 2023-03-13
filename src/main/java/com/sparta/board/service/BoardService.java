@@ -13,7 +13,6 @@ import com.sparta.board.repository.BoardRepository;
 import com.sparta.board.repository.UserRepository;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -114,8 +113,8 @@ public class BoardService {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
         }else {
             boardRepository.deleteById(id);
-            ResponseMsgStatusCodeDto responseMsgStatusCodeDto = new ResponseMsgStatusCodeDto("게시물 삭제 성공!", HttpStatus.OK.value());
-            return ResponseEntity.status(HttpStatus.OK).body(responseMsgStatusCodeDto);
+            SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("게시물 삭제 성공!", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
     }
 
