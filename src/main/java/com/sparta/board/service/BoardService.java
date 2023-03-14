@@ -92,12 +92,12 @@ public class BoardService {
         if ((!board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
 
-        } else {
+        }
             board.update(boardRequestDto);
             return new BoardResponseDto(board);
         }
 
-    }
+
 
 
 
@@ -112,12 +112,12 @@ public class BoardService {
         Board board = getBoard(id);
         if (!(board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
-        }else {
+        }
             boardRepository.deleteById(id);
             SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("게시물 삭제 성공!", HttpStatus.OK.value());
             return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
-    }
+
 
 
 

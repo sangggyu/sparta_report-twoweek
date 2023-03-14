@@ -19,13 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final JwtUtil jwtUtil;
+//    private final JwtUtil jwtUtil;
     private final BoardRepository boardRepository;
 
     //댓글 등록
@@ -45,39 +45,40 @@ public class CommentService {
 
 //        User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
-        if (!(comment.getUser().getId().equals(user.getId())  || user.getRole().equals(UserEnum.ADMIN))) {
+        if (!(comment.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
-        } else {
+        }
             comment.updateComment(commentRequestDto);
             return new CommentResponseDto(comment);
         }
-    }
-//
-//    //    //댓글삭제
+
+
+//  댓글삭제
     @Transactional
     public ResponseEntity delete(Long id, User user) {
 //        User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
         if (!(comment.getUser().getId() == user.getId() || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
-        } else {
+        }
             commentRepository.deleteById(id);
             SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("댓글 삭제 성공!", HttpStatus.OK.value());
             return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
+
+
+    private Comment getComment(Long id) {
+        return commentRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
+        );
     }
 
-            private Comment getComment (Long id){
-            return commentRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
-            );
-        }
-        private Board getBoard (Long id){
-            return boardRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
-            );
-        }
+    private Board getBoard(Long id) {
+        return boardRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
+        );
     }
+}
 
 
 //// 관리자 계정만 모든 댓글 수정, 삭제 가능

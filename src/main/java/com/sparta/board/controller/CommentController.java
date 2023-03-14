@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
 //    @ApiOperation(value="댓글 작성 테스트", notes="댓글 작성 테스트")
-    @PostMapping("/comment/{id}")
+    @PostMapping("/comments/{id}")
     public CommentResponseDto createComment(@PathVariable Long id , @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.createComment(id, commentRequestDto, userDetails.user());
     }
@@ -29,12 +29,12 @@ public class CommentController {
 //        return commentService.createComment(id, commentRequestDto, request);
 //    }
 //    @ApiOperation(value="댓글 수정 테스트", notes="댓글 수정 테스트")
-    @PutMapping("/comment/{id}")
+    @PutMapping("/comments/{id}")
     public CommentResponseDto updateComment(@PathVariable Long id , @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(id,commentRequestDto, userDetails.user());
     }
 //    @ApiOperation(value="댓글 삭제 테스트", notes="댓글 삭제 테스트")
-    @DeleteMapping("/comment/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseEntity delete (@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.delete(id, userDetails.user());
     }
