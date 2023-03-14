@@ -50,8 +50,8 @@ public class UserService {
             role = UserEnum.ADMIN;
         }
 
-            User user = new User(signupRequestDto, role);
-            user.hashPassword(passwordEncoder);
+            User user = new User(username,password, role);
+//            user.hashPassword(passwordEncoder);
             userRepository.save(user);
 
             SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("회원가입 성공!", HttpStatus.OK.value());

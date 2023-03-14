@@ -1,13 +1,8 @@
 package com.sparta.board.jwt;
 
 
-import com.sparta.board.entity.User;
 import com.sparta.board.entity.UserEnum;
-import com.sparta.board.repository.BoardRepository;
-import com.sparta.board.repository.UserRepository;
 import com.sparta.board.security.UserDetailsServiceImpl;
-import com.sparta.board.status.CustomException;
-import com.sparta.board.status.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -30,10 +25,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-
-    private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
-//    private final CommentRepository commentRepository;
+    private final UserDetailsServiceImpl userDetailsService;
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
@@ -95,30 +87,6 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
-    public User getUserInfo(HttpServletRequest request) {
-        String token = resolveToken(request);
-        Claims claims;
-        User user;
-
-        if (token != null) {
-            // JWT의 유효성을 검증하여 올바른 JWT인지 확인
-            if (validateToken(token)) {
-                // 토큰에서 사용자 정보 가져오기
-                claims = getUserInfoFromToken(token);
-            } else {
-                throw new CustomException(ErrorCode.INVALID_TOKEN);
-            }
-
-            // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-            user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-            );
-            return user;
-        }
-        throw new CustomException(ErrorCode.NOT_TOKEN);
-    }
-    private final UserDetailsServiceImpl userDetailsService;
 
 
     // 인증 객체 생성

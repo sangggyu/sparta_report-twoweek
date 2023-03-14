@@ -4,7 +4,7 @@ import com.sparta.board.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 
 import javax.persistence.*;
@@ -46,9 +46,15 @@ public class User {
         this.role = role;
 
     }
-    public void hashPassword(PasswordEncoder passwordEncoder){
-        this.password = passwordEncoder.encode(password);
+
+    public User(String username, String password, UserEnum role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
+//    public void hashPassword(PasswordEncoder passwordEncoder){
+//        this.password = passwordEncoder.encode(password);
+//    }
 
 
 }

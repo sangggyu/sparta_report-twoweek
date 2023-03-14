@@ -30,10 +30,10 @@ public class CommentService {
 
     //댓글 등록
     @Transactional
-    public CommentResponseDto createComment(Long id, CommentRequestDto commentRequestDto, HttpServletRequest request) {
+    public CommentResponseDto createComment(Long id, CommentRequestDto commentRequestDto, User user) {
 
         Board board = getBoard(id);
-        User user = jwtUtil.getUserInfo(request);
+//        User user = jwtUtil.getUserInfo(request);
         Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto, user, board));
 
         return new CommentResponseDto(comment);
@@ -41,9 +41,9 @@ public class CommentService {
 
     //    댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto, HttpServletRequest request) {
+    public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
 
-        User user = jwtUtil.getUserInfo(request);
+//        User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
         if (!(comment.getUser().getId().equals(user.getId())  || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
@@ -52,11 +52,11 @@ public class CommentService {
             return new CommentResponseDto(comment);
         }
     }
-
-    //    //댓글삭제
+//
+//    //    //댓글삭제
     @Transactional
-    public ResponseEntity delete(Long id, HttpServletRequest request) {
-        User user = jwtUtil.getUserInfo(request);
+    public ResponseEntity delete(Long id, User user) {
+//        User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
         if (!(comment.getUser().getId() == user.getId() || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);

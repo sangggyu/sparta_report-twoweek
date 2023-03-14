@@ -6,22 +6,21 @@ import com.sparta.board.entity.Board;
 
 import com.sparta.board.entity.User;
 import com.sparta.board.entity.UserEnum;
-import com.sparta.board.jwt.JwtUtil;
+
 import com.sparta.board.repository.BoardRepository;
 
 
-import com.sparta.board.repository.UserRepository;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +31,18 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
+//
+//    private final JwtUtil jwtUtil;
+//    private final UserRepository userRepository;
 
     //게시글 작성
     @Transactional
-    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, HttpServletRequest request) {
-        User user = jwtUtil.getUserInfo(request);
-        Board board = boardRepository.saveAndFlush(new Board(boardRequestDto, user));
+    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, User user) {
+//        User user = jwtUtil.getUserInfo(request);
 
+        Board board = boardRepository.saveAndFlush(new Board(boardRequestDto, user));
         return new BoardResponseDto(board);
+
     }
 
 
@@ -86,16 +86,15 @@ public class BoardService {
 
     //    선택한 게시물 수정
     @Transactional
-    public BoardResponseDto update(Long id, BoardRequestDto boardRequestDto, HttpServletRequest request) {
+    public BoardResponseDto update(Long id, BoardRequestDto boardRequestDto, User user) {
         Board board = getBoard(id);
-        User user = jwtUtil.getUserInfo(request);
-        if ((board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
-
-            board.update(boardRequestDto);
-            return new BoardResponseDto(board);
+//        User user = jwtUtil.getUserInfo(request);
+        if ((!board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
+            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
 
         } else {
-            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
+            board.update(boardRequestDto);
+            return new BoardResponseDto(board);
         }
 
     }
@@ -103,13 +102,15 @@ public class BoardService {
 
 
 
+
+
     //선택한 게시글 삭제
 
     @Transactional
-    public ResponseEntity delete(Long id, HttpServletRequest request) {
-        User user = jwtUtil.getUserInfo(request);
+    public ResponseEntity delete(Long id, User user) {
+//        User user = jwtUtil.getUserInfo(request);
         Board board = getBoard(id);
-        if (!(board.getUser().getId() == user.getId() || user.getRole().equals(UserEnum.ADMIN))) {
+        if (!(board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
         }else {
             boardRepository.deleteById(id);
