@@ -67,7 +67,7 @@ public class CommentService {
         }
     }
 
-        private Comment getComment (Long id){
+            private Comment getComment (Long id){
             return commentRepository.findById(id).orElseThrow(
                     () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
             );
