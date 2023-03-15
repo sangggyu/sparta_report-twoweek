@@ -3,13 +3,10 @@ package com.sparta.board.service;
 import com.sparta.board.dto.CommentRequestDto;
 import com.sparta.board.dto.CommentResponseDto;
 import com.sparta.board.dto.SecurityExceptionDto;
-import com.sparta.board.entity.Board;
-import com.sparta.board.entity.Comment;
-import com.sparta.board.entity.User;
-import com.sparta.board.entity.UserEnum;
-import com.sparta.board.jwt.JwtUtil;
+import com.sparta.board.entity.*;
 import com.sparta.board.repository.BoardRepository;
 import com.sparta.board.repository.CommentRepository;
+import com.sparta.board.repository.HeartRepository;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 
 @Slf4j
@@ -28,16 +27,38 @@ public class CommentService {
 //    private final JwtUtil jwtUtil;
     private final BoardRepository boardRepository;
 
-    //댓글 등록
+
+//    //댓글 등록
     @Transactional
     public CommentResponseDto createComment(Long id, CommentRequestDto commentRequestDto, User user) {
 
         Board board = getBoard(id);
 //        User user = jwtUtil.getUserInfo(request);
-        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto, user, board));
+        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto, user));
+        board.getComments().add(comment);
+        return new CommentResponseDto(comment);
+    }
+
+    //대댓글
+    @Transactional
+    public CommentResponseDto createCommentList(Long id,CommentRequestDto commentRequestDto, User user, Long parentId) {
+        Board board = getBoard(id);
+        Comment parentComment = null;
+        if(parentId != null) {
+            parentComment = commentRepository.findById(parentId)
+                    .orElseThrow(() -> new EntityNotFoundException(""));
+        }
+        Comment comment = new Comment(commentRequestDto, user, parentComment);
+        commentRepository.saveAndFlush(comment);
+
+        if(parentComment != null) {
+            parentComment.getChildren().add(comment);
+            commentRepository.saveAndFlush(parentComment);
+        }
 
         return new CommentResponseDto(comment);
     }
+
 
     //    댓글 수정
     @Transactional
@@ -55,10 +76,10 @@ public class CommentService {
 
 //  댓글삭제
     @Transactional
-    public ResponseEntity delete(Long id, User user) {
+    public ResponseEntity<?> delete(Long id, User user) {
 //        User user = jwtUtil.getUserInfo(request);
         Comment comment = getComment(id);
-        if (!(comment.getUser().getId() == user.getId() || user.getRole().equals(UserEnum.ADMIN))) {
+        if (!(comment.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);
         }
             commentRepository.deleteById(id);

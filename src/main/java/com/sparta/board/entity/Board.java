@@ -35,13 +35,9 @@ public class Board extends Timestamped{
     @Column(nullable = false)
     private Integer heart;
 
-
-
-
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "comment_id", nullable = false)
     //Comment테이블은 연관관계의 주인인 Board 테이블의 "comment" 필드에 해당한다
-//    @JoinColumn(name = "COMMENT_ID")
     private List<Comment> comments = new ArrayList<>();
 
     public Board(BoardRequestDto requestDto, User user) {

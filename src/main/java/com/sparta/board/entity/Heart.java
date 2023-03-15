@@ -20,6 +20,7 @@ public class Heart {
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
+
     @Column(nullable = false)
     private boolean status; //true = 좋아요 , false = 좋아요 취소
 
@@ -28,6 +29,5 @@ public class Heart {
         this.board = board;
         this.status = true;
     }
-
 
 }

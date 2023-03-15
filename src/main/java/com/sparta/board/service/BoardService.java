@@ -2,11 +2,7 @@ package com.sparta.board.service;
 
 import com.sparta.board.dto.*;
 
-import com.sparta.board.entity.Board;
-
-import com.sparta.board.entity.Heart;
-import com.sparta.board.entity.User;
-import com.sparta.board.entity.UserEnum;
+import com.sparta.board.entity.*;
 
 import com.sparta.board.repository.BoardRepository;
 
@@ -31,7 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-    private final static String SUCCESS_HEART_BOARD = "좋아요 완료";
+
     private final BoardRepository boardRepository;
     private final HeartRepository heartRepository;
 //
@@ -122,7 +118,7 @@ public class BoardService {
     //게시물 좋아요 기능
 
     @Transactional
-    public ResponseEntity<?> updateHeartofBoard(Long id, User user){
+    public ResponseEntity<?> updateHeartBoard(Long id, User user){
         Board board = getBoard(id);
 
         if (!hasHeartBoard(board, user)) {

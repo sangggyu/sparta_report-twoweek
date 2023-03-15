@@ -1,24 +1,25 @@
 package com.sparta.board.dto;
 
-import com.sparta.board.entity.Board;
 import com.sparta.board.entity.Comment;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class CommentResponseDto {
-    private Long id;
+    private final Long id;
 
-    private String comment;
+    private final String comment;
 
-    private String username;
+    private final String username;
 
-    private String modifiedAt;
+    private final String modifiedAt;
 
-    private String createAt;
+    private final String createAt;
+
+    private final List<CommentResponseDto> commentList = new ArrayList<>();
+//    private Long parentId;
 
 
 
@@ -28,6 +29,9 @@ public class CommentResponseDto {
         this.modifiedAt = comment.getmodifiedAt();
         this.username = comment.getUser().getUsername();
         this.id = comment.getId();
+        for(Comment comments : comment.getChildren()){
+            commentList.add(new CommentResponseDto(comments));
+        }
 
     }
 

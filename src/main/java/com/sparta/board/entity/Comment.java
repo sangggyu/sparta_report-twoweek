@@ -4,7 +4,8 @@ import com.sparta.board.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -13,6 +14,7 @@ public class Comment extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
     @Column(nullable = false)
     private String comment;
@@ -23,19 +25,34 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "BOARD_ID", nullable = false)
-    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private Comment parent;
 
-    public Comment(CommentRequestDto commentRequestDto, User user, Board board) {
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
+
+    public Comment(CommentRequestDto commentRequestDto, User user) {
         this.comment = commentRequestDto.getComment();
         this.username = user.getUsername();
-        this.board = board;
         this.user = user;
+
+
     }
 
+    public Comment(CommentRequestDto commentRequestDto, User user, Comment parentComment) {
+        this.comment = commentRequestDto.getComment();
+        this.username = user.getUsername();
+        this.user = user;
+        this.parent = parentComment;
+
+    }
 
     public void updateComment(CommentRequestDto commentRequestDto) {
         this.comment = commentRequestDto.getComment();
     }
+
+
+
 }

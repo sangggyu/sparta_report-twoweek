@@ -13,21 +13,21 @@ import java.util.List;
 
 @Getter
 public class BoardResponseDto {
-    private Long id;
-    private String title;
+    private final Long id;
+    private final String title;
 //    private Long USER_ID;
-    private String username;
+    private final String username;
 //    private String password;
-    private String content;
+    private final String content;
 
 
-    private String createAt;
+    private final String createAt;
 
-    private String modifiedAt;
+    private final String modifiedAt;
 
-    private int heartCount;
+    private final int heartCount;
 
-    private List<CommentResponseDto> commentList = new ArrayList<>();
+    private final List<CommentResponseDto> commentList = new ArrayList<>();
 
 
 
@@ -50,8 +50,8 @@ public class BoardResponseDto {
 //        this.title = board.getTitle();
 //        this.username = board.getUsername();
 //        this.content = board.getContent();
-//        this.createAt = board.getCreatedAt();
-//        this.modifiedAt = board.getModifiedAt();
+//        this.createAt = board.getcreatedAt();
+//        this.modifiedAt = board.getmodifiedAt();
 //        this.commentList = commentlist;
 //    }
 }

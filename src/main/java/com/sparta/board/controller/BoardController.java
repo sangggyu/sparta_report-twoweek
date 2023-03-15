@@ -80,16 +80,10 @@ public class BoardController {
     }
 
     @PostMapping("/boards/{id}")
-    public ResponseEntity<?> HeartBoard(@PathVariable Long id) {
-        User user = getPrincipal();
-        return boardService.updateHeartofBoard(id, user);
+    public ResponseEntity<?> HeartBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.updateHeartBoard(id, userDetails.user());
     }
 
-    private User getPrincipal() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authentication.getName()).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
-        );
-    }
+
 
 }

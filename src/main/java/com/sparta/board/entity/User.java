@@ -68,10 +68,10 @@ public class User {
         this.role = role;
     }
 
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
-        return this;
-    }
+//    public User kakaoIdUpdate(Long kakaoId) {
+//        this.kakaoId = kakaoId;
+//        return this;
+//    }
 
 
 }
