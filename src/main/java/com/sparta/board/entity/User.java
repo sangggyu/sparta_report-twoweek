@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private Long kakaoId;
+
+    private String email;
+
 
 
     @Column(nullable = false)
@@ -55,6 +59,19 @@ public class User {
 //    public void hashPassword(PasswordEncoder passwordEncoder){
 //        this.password = passwordEncoder.encode(password);
 //    }
+
+    public User(String username, Long kakaoId, String password, String email, UserEnum role) {
+        this.username = username;
+        this.kakaoId = kakaoId;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
 
 
 }

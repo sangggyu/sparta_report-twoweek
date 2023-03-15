@@ -4,12 +4,14 @@ import com.sparta.board.dto.*;
 
 import com.sparta.board.entity.Board;
 
+import com.sparta.board.entity.Heart;
 import com.sparta.board.entity.User;
 import com.sparta.board.entity.UserEnum;
 
 import com.sparta.board.repository.BoardRepository;
 
 
+import com.sparta.board.repository.HeartRepository;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-
+    private final static String SUCCESS_HEART_BOARD = "좋아요 완료";
     private final BoardRepository boardRepository;
+    private final HeartRepository heartRepository;
 //
 //    private final JwtUtil jwtUtil;
 //    private final UserRepository userRepository;
@@ -97,13 +100,6 @@ public class BoardService {
             return new BoardResponseDto(board);
         }
 
-
-
-
-
-
-
-
     //선택한 게시글 삭제
 
     @Transactional
@@ -118,15 +114,45 @@ public class BoardService {
             return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
         }
 
-
-
-
-
     private Board getBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
         );
     }
+    //게시물 좋아요 기능
+
+    @Transactional
+    public ResponseEntity<?> updateHeartofBoard(Long id, User user){
+        Board board = getBoard(id);
+
+        if (!hasHeartBoard(board, user)) {
+            board.increaseHeartCount();
+            return createHeartBoard(user , board);
+        }
+        board.decreaseHeartCount();
+        return removeHeartBoard(user, board);
+    }
+    //게시물 좋아요
+    public ResponseEntity<?> createHeartBoard(User user, Board board){
+        Heart heart = new Heart(user, board);
+        heartRepository.save(heart);
+        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("좋아요 완료!", HttpStatus.OK.value());
+        return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
+    }
+    //같은 아이디에 게시물 좋아요 중복 취소
+    public ResponseEntity<?> removeHeartBoard(User user, Board board){
+        Heart heart = heartRepository.findByUserAndBoard(user, board).orElseThrow(
+                () -> new CustomException(ErrorCode.HEART_Not_found_Exception)
+        );
+          heartRepository.delete(heart);
+          SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("좋아요 취소 완료!",HttpStatus.OK.value());
+          return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
+        }
+
+    public boolean hasHeartBoard(Board board, User user){
+        return heartRepository.findByUserAndBoard(user, board).isPresent();
+    }
+
 }
 
 

@@ -3,6 +3,8 @@ package com.sparta.board.entity;
 import com.sparta.board.dto.BoardRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class Board extends Timestamped{
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
+    @Column(nullable = false)
+    private Integer heart;
+
 
 
 
@@ -44,16 +49,19 @@ public class Board extends Timestamped{
         this.content = requestDto.getContent();
         this.username = user.getUsername();
         this.user = user;
-
-
+        this.heart = 0;
     }
-
-
 
     public void update(BoardRequestDto boardRequestDto) {
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
+    }
 
+    public void increaseHeartCount() {
+        this.heart += 1;
+    }
+    public void decreaseHeartCount() {
+        this.heart -= 1;
     }
 
 

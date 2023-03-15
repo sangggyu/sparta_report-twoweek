@@ -25,6 +25,8 @@ public class BoardResponseDto {
 
     private String modifiedAt;
 
+    private int heartCount;
+
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
 
@@ -36,6 +38,7 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createAt = board.getcreatedAt();
         this.modifiedAt = board.getmodifiedAt();
+        this.heartCount = board.getHeart();
         for(Comment comment : board.getComments()){
             commentList.add(new CommentResponseDto(comment));
         }
