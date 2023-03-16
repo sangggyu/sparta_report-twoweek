@@ -18,6 +18,9 @@ public class CommentResponseDto {
 
     private final String createAt;
 
+    private final int heartCount;
+
+
     private final List<CommentResponseDto> commentList = new ArrayList<>();
 //    private Long parentId;
 
@@ -29,6 +32,7 @@ public class CommentResponseDto {
         this.modifiedAt = comment.getmodifiedAt();
         this.username = comment.getUser().getUsername();
         this.id = comment.getId();
+        this.heartCount = comment.getHeart();
         for(Comment comments : comment.getChildren()){
             commentList.add(new CommentResponseDto(comments));
         }

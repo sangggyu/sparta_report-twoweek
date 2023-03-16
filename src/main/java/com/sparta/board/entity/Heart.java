@@ -20,6 +20,8 @@ public class Heart {
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Comment comment;
 
     @Column(nullable = false)
     private boolean status; //true = 좋아요 , false = 좋아요 취소
@@ -30,4 +32,9 @@ public class Heart {
         this.status = true;
     }
 
+    public Heart(User user, Comment comment) {
+        this.user = user;
+        this.comment = comment;
+        this.status = true;
+    }
 }

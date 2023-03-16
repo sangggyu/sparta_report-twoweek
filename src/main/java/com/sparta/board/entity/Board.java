@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Board extends Timestamped{
     @Id
-    @Column(name = "BOARD_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -35,8 +34,8 @@ public class Board extends Timestamped{
     @Column(nullable = false)
     private Integer heart;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "comment_id", nullable = false)
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "comment_id")
     //Comment테이블은 연관관계의 주인인 Board 테이블의 "comment" 필드에 해당한다
     private List<Comment> comments = new ArrayList<>();
 

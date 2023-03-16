@@ -26,6 +26,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 //    private final JwtUtil jwtUtil;
     private final BoardRepository boardRepository;
+    private final HeartRepository heartRepository;
 
 
 //    //댓글 등록
@@ -33,8 +34,9 @@ public class CommentService {
     public CommentResponseDto createComment(Long id, CommentRequestDto commentRequestDto, User user) {
 
         Board board = getBoard(id);
-//        User user = jwtUtil.getUserInfo(request);
-        Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto, user));
+
+        Comment comment = new Comment(commentRequestDto, user);
+        commentRepository.saveAndFlush(comment);
         board.getComments().add(comment);
         return new CommentResponseDto(comment);
     }
@@ -46,7 +48,7 @@ public class CommentService {
         Comment parentComment = null;
         if(parentId != null) {
             parentComment = commentRepository.findById(parentId)
-                    .orElseThrow(() -> new EntityNotFoundException(""));
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
         }
         Comment comment = new Comment(commentRequestDto, user, parentComment);
         commentRepository.saveAndFlush(comment);
@@ -99,7 +101,41 @@ public class CommentService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_BOARD_ALL)
         );
     }
+
+    @Transactional
+    public ResponseEntity<?> updateHeartComment(Long id, User user){
+        Comment comment = getComment(id);
+
+        if (!hasHeartComment(comment, user)) {
+            comment.increaseHeartCount();
+            return createHeartComment(user , comment);
+        }
+        comment.decreaseHeartCount();
+        return removeHeartComment(user, comment);
+    }
+    //댓글 좋아요
+    public ResponseEntity<?> createHeartComment(User user, Comment comment){
+        Heart heart = new Heart(user, comment);
+        heartRepository.save(heart);
+        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("좋아요 완료!", HttpStatus.OK.value());
+        return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
+    }
+    //같은 아이디에 댓글 좋아요 중복 취소
+    public ResponseEntity<?> removeHeartComment(User user, Comment comment){
+        Heart heart = heartRepository.findByUserAndComment(user, comment).orElseThrow(
+                () -> new CustomException(ErrorCode.HEART_Not_found_Exception)
+        );
+        heartRepository.delete(heart);
+        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("좋아요 취소 완료!",HttpStatus.OK.value());
+        return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
+    }
+
+    public boolean hasHeartComment(Comment comment, User user){
+        return heartRepository.findByUserAndComment(user, comment).isPresent();
+    }
+
 }
+
 
 
 //// 관리자 계정만 모든 댓글 수정, 삭제 가능

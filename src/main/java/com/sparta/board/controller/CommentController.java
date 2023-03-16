@@ -43,4 +43,9 @@ public class CommentController {
         return commentService.delete(id, userDetails.user());
     }
 
+    @PostMapping("/comment/heart/{id}")
+    public ResponseEntity<?> HeartComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.updateHeartComment(id, userDetails.user());
+    }
+
 }

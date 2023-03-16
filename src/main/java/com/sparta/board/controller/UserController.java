@@ -1,26 +1,23 @@
 package com.sparta.board.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.board.dto.LoginRequestDto;
 import com.sparta.board.dto.SignupRequestDto;
-import com.sparta.board.jwt.JwtUtil;
+
 
 import com.sparta.board.service.UserService;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+
 
 @RestController
 @Validated

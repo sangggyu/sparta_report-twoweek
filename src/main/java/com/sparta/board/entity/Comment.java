@@ -14,7 +14,6 @@ public class Comment extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
     @Column(nullable = false)
     private String comment;
@@ -29,6 +28,11 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "PARENT_ID")
     private Comment parent;
 
+    @Column(nullable = false)
+    private Integer heart;
+
+
+
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
@@ -37,6 +41,8 @@ public class Comment extends Timestamped{
         this.comment = commentRequestDto.getComment();
         this.username = user.getUsername();
         this.user = user;
+        this.heart = 0;
+
 
 
     }
@@ -46,12 +52,23 @@ public class Comment extends Timestamped{
         this.username = user.getUsername();
         this.user = user;
         this.parent = parentComment;
+        this.heart = 0;
 
     }
 
     public void updateComment(CommentRequestDto commentRequestDto) {
         this.comment = commentRequestDto.getComment();
     }
+
+    public void increaseHeartCount() {
+        this.heart += 1;
+    }
+    public void decreaseHeartCount() {
+        this.heart -= 1;
+    }
+
+
+
 
 
 

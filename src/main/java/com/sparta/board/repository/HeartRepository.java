@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface HeartRepository extends JpaRepository <Heart, Long> {
     Optional<Heart> findByUserAndBoard (User user, Board board);
 
+    Optional<Heart> findByUserAndComment (User user, Comment comment);
+
 }
