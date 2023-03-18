@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  S3_BUCKET_NAME: board-lim
+  S3_BUCKET_NAME: limsanggyu
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
       run: cp ./build/libs/*.jar ./deploy
 
     - name: Make zip file
-      run: zip -r ./board-lim.zip ./deploy
+      run: zip -r ./limsanggyu.zip ./deploy
       shell: bash
 
     - name: Configure AWS credentials
@@ -49,4 +49,4 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./board-lim.zip s3://$S3_board_NAME/
+      run: aws s3 cp --region ap-northeast-2 ./limsanggyu.zip s3://$S3_limsanggyu_NAME/
