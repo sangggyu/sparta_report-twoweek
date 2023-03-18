@@ -47,7 +47,7 @@ jobs:
       run: cp ./scripts/*.sh ./deploy
 
     - name: Make zip file
-      run: zip -r ./coinTalk.zip ./deploy
+      run: zip -r ./board2.zip ./deploy
       shell: bash
 
     - name: Configure AWS credentials
@@ -70,5 +70,5 @@ jobs:
         --application-name Board \
         --deployment-group-name board-group \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=board2-deploy,bundleType=zip,key=board2.zip \ 
+        --s3-location bucket=board2-deploy,bundleType=zip,key=board2.zip \
         --region ap-northeast-2
