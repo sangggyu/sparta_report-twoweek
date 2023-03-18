@@ -69,7 +69,7 @@ public class BoardController {
     public ResponseEntity<?> delete (@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.delete(id, userDetails.user());
     }
-
+    //게시물 좋아요
     @PostMapping("/boards/{id}")
     public ResponseEntity<?> HeartBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.updateHeartBoard(id, userDetails.user());

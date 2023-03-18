@@ -16,11 +16,7 @@ import static com.sparta.board.status.ErrorCode.DUPLICATE_RESOURCE;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(value = {ConstraintViolationException.class, DataIntegrityViolationException.class})
-//    protected ResponseEntity<ErrorResponse> handleDataException() {
-//        log.error("handleDataException throw Exception : {}", DUPLICATE_RESOURCE);
-//        return ErrorResponse.toResponseEntity(DUPLICATE_RESOURCE);
-//    }
+
 
     @ExceptionHandler(value = { CustomException.class })
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {

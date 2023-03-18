@@ -30,9 +30,6 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final HeartRepository heartRepository;
-//
-//    private final JwtUtil jwtUtil;
-//    private final UserRepository userRepository;
 
     //게시글 작성
     @Transactional
@@ -43,6 +40,8 @@ public class BoardService {
         return new BoardResponseDto(board);
 
     }
+
+
 
 
     //게시글 전체 조회
@@ -100,7 +99,6 @@ public class BoardService {
 
     @Transactional
     public ResponseEntity delete(Long id, User user) {
-//        User user = jwtUtil.getUserInfo(request);
         Board board = getBoard(id);
         if (!(board.getUser().getId().equals(user.getId()) || user.getRole().equals(UserEnum.ADMIN))) {
             throw new CustomException(ErrorCode.NOT_FOUND_COMMENT_ADMIN);

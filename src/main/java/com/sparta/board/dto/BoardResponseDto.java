@@ -5,6 +5,7 @@ import com.sparta.board.entity.Comment;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -27,6 +28,8 @@ public class BoardResponseDto {
 
     private final int heartCount;
 
+
+
     private final List<CommentResponseDto> commentList = new ArrayList<>();
 
 
@@ -39,6 +42,7 @@ public class BoardResponseDto {
         this.createAt = board.getcreatedAt();
         this.modifiedAt = board.getmodifiedAt();
         this.heartCount = board.getHeart();
+
         for(Comment comment : board.getComments()){
             commentList.add(new CommentResponseDto(comment));
         }

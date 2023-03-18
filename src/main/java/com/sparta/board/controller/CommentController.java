@@ -23,7 +23,7 @@ public class CommentController {
     (@PathVariable Long id , @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.createComment(id, commentRequestDto, userDetails.user());
     }
-
+ //댓글등록
     @PostMapping("/comments/{id}/{commentId}")
     public CommentResponseDto createCommentList( @PathVariable Long id,
             @PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto,
@@ -42,7 +42,7 @@ public class CommentController {
     public ResponseEntity<?> delete (@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.delete(id, userDetails.user());
     }
-
+    //댓글 좋아요
     @PostMapping("/comment/heart/{id}")
     public ResponseEntity<?> HeartComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateHeartComment(id, userDetails.user());
