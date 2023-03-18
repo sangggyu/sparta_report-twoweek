@@ -28,8 +28,6 @@ public class BoardResponseDto {
 
     private final int heartCount;
 
-
-
     private final List<CommentResponseDto> commentList = new ArrayList<>();
 
 
