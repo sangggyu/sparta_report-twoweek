@@ -54,7 +54,6 @@ public class Board extends Timestamped{
         this.username = user.getUsername();
         this.user = user;
         this.heart = 0;
-        this.hashTag = requestDto.getHashTag();
     }
 
     public void update(BoardRequestDto boardRequestDto) {
