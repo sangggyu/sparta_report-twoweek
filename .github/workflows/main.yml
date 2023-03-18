@@ -65,9 +65,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run:
-        aws deploy create-deployment \
-        --application-name limsanggyu \
-        --deployment-group-name limsanggyu-group \
-        --file-exists-behavior OVERWRITE \
-        --s3-location bucket=limsanggyu-deploy,bundleType=zip,key=limsanggyu.zip \ 
+        aws deploy create-deployment
+        --application-name limsanggyu
+        --deployment-group-name limsanggyu-group
+        --file-exists-behavior OVERWRITE
+        --s3-location bucket=limsanggyu-deploy,bundleType=zip,key=limsanggyu.zip
         --region ap-northeast-2
