@@ -39,7 +39,7 @@ public class UserService {
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+            throw new CustomException(ErrorCode.NOT_FOUND_USER_ID);
         }
         // 사용자 ROLE 확인
         UserEnum role = UserEnum.USER;

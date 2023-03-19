@@ -25,7 +25,7 @@ public enum ErrorCode {
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다"),
-
+    NOT_FOUND_USER_ID(HttpStatus.BAD_REQUEST, "이미 가입된 아이디가 존재합니다."),
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),
     NOT_FOUND_BOARD_ALL(HttpStatus.BAD_REQUEST, "게시글이 없습니다."),
     NOT_FOUND_BOARD(HttpStatus.BAD_REQUEST, "게시글 수정 권한이 없습니다."),
