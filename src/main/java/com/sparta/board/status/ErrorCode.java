@@ -35,7 +35,7 @@ public enum ErrorCode {
     NOT_FOUND_SIGNUP_USER(HttpStatus.BAD_REQUEST, "회원가입 형식이 맞지 않습니다."),
     NOT_FOUND_COMMENT_ADMIN(HttpStatus.BAD_REQUEST, "댓글을 찾을 수 없습니다.(관리자계정)"),
 
-    HEART_Not_found_Exception(HttpStatus.NOT_FOUND, "좋아요 기록을 찾을 수 없습니다.");
+    HEART_Not_found_Exception(HttpStatus.NOT_FOUND, "좋아요 기록을 찾을 수 없습니다.커밋용 !!!!");
 
 
 
