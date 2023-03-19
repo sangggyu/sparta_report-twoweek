@@ -61,11 +61,15 @@ public class WebSecurityConfig {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/boards/**").permitAll()
                 .antMatchers("/api/comments/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/private/**").hasIpAddress("3.39.193.104/")
+
+//                .anyRequest().authenticated()
+
                 .and()
                 .cors()
                 // JWT 인증/인가를 사용하기 위한 설정
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
