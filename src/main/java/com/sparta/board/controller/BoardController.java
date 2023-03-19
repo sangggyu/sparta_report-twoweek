@@ -3,6 +3,7 @@ package com.sparta.board.controller;
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
 
+import com.sparta.board.dto.SecurityExceptionDto;
 import com.sparta.board.security.UserDetailsImpl;
 import com.sparta.board.service.BoardService;
 
@@ -66,7 +67,7 @@ public class BoardController {
     //게시물 삭제
 //    @ApiOperation(value="게시물 삭제 테스트", notes="게시물 삭제 테스트")
     @DeleteMapping("/boards/{id}")
-    public ResponseEntity<?> delete (@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> delete (@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.delete(id, userDetails.user());
     }
     //게시물 좋아요

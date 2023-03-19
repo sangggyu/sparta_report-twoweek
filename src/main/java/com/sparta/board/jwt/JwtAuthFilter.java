@@ -60,6 +60,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error(e.getMessage());
         }
     }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getRequestURI().equals("/api/post/");  // 생기는 의문 이거 POST메서드도 풀릴 거 같음
+    }
 
 
 }

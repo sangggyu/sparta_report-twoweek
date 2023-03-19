@@ -80,12 +80,11 @@ public class UserService {
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw  new CustomException(ErrorCode.NOT_FOUND_USER);
         }
-        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("로그인 테스트!", HttpStatus.OK.value());
+        SecurityExceptionDto securityExceptionDto = new SecurityExceptionDto("로그인 성공!", HttpStatus.OK.value());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
 
         return ResponseEntity.status(HttpStatus.OK).body(securityExceptionDto);
     }
 }
-//주석주석
-//추가주석
+
 
