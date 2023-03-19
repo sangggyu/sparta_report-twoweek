@@ -21,6 +21,8 @@ public class SignupRequestDto {
             message = "8~15글자, 글자 1개, 숫자 1개, 특수문자 1개 꼭 입력해야합니다.")
     private String password;
 
+    private String nickname;
+
     private boolean admin;
     private String adminToken = "";
 
