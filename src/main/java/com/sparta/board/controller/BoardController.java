@@ -20,7 +20,7 @@ import java.util.List;
 
 
 
-@CrossOrigin
+
 @Validated
 @RestController
 @RequiredArgsConstructor
