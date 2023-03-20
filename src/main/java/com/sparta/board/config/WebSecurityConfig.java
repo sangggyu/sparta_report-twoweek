@@ -81,8 +81,8 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("HEAD\",\"POST\",\"GET\",\"DELETE\",\"PATCH\""));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization");
-        configuration.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
+//        configuration.addExposedHeader("Authorization");
+//        configuration.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
