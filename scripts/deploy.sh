@@ -3,7 +3,7 @@
 REPOSITORY=/home/ubuntu/app
 cd $REPOSITORY
 
-APP_NAME=cicd-test
+APP_NAME=board
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
