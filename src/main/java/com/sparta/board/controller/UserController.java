@@ -44,16 +44,16 @@ public class UserController {
     public ResponseEntity login(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
-    @CrossOrigin
-    @GetMapping("/forbidden")
-    public ModelAndView getForbidden() {
-        return new ModelAndView("forbidden");
-    }
-    @CrossOrigin
-    @PostMapping("/forbidden")
-    public ModelAndView postForbidden() {
-        return new ModelAndView("forbidden");
-    }
+//    @CrossOrigin
+//    @GetMapping("/forbidden")
+//    public ModelAndView getForbidden() {
+//        return new ModelAndView("forbidden");
+//    }
+//    @CrossOrigin
+//    @PostMapping("/forbidden")
+//    public ModelAndView postForbidden() {
+//        return new ModelAndView("forbidden");
+//    }
 
 //    @GetMapping("/kakao/callback")
 //    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
