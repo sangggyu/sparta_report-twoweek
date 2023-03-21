@@ -63,10 +63,9 @@ public class WebSecurityConfig {
                 .antMatchers("/api/comments/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .cors()
                 // JWT 인증/인가를 사용하기 위한 설정
-                .and()
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.cors();
 
         http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
@@ -74,18 +73,21 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource(){
 
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD\",\"POST\",\"GET\",\"DELETE\",\"PATCH\""));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization");
-        configuration.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
+        CorsConfiguration config = new CorsConfiguration();
 
+        // 사전에 약속된 출처를 명시
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+        config.validateAllowCredentials();
+
+        // 어떤 경로에 이 설정을 적용할 지 명시합니다. (여기서는 전체 경로)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

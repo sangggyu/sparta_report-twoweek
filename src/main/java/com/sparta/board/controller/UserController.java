@@ -30,7 +30,7 @@ public class UserController {
 
 
 //    @ApiOperation(value="회원가입 테스트", notes="회원가입 테스트")
-    @CrossOrigin
+
     @PostMapping("/signup")
     public ResponseEntity signup(@Validated @RequestBody  SignupRequestDto signupRequestDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -39,7 +39,7 @@ public class UserController {
             return userService.signup(signupRequestDto);
     }
 //    @ApiOperation(value="로그인 테스트", notes="로그인 테스트")
-    @CrossOrigin
+
     @PostMapping("/login")
     public ResponseEntity login(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
