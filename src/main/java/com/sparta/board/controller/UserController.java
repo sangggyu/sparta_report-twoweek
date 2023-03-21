@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
