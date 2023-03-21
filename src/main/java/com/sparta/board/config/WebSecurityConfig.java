@@ -58,7 +58,7 @@ public class WebSecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/**").permitAll()
-                .antMatchers("/user/**").permitAll()
+                .antMatchers("/api/user/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/boards/**").permitAll()
                 .antMatchers("/api/comments/**").permitAll()
                 .anyRequest().authenticated()
