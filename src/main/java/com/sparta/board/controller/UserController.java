@@ -8,6 +8,7 @@ import com.sparta.board.service.UserService;
 import com.sparta.board.status.CustomException;
 import com.sparta.board.status.ErrorCode;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class UserController {
 //    private final KakaoService kakaoService;
 
 
-//    @ApiOperation(value="회원가입 테스트", notes="회원가입 테스트")
+    @ApiOperation(value="회원가입 테스트", notes="회원가입 테스트")
 
     @PostMapping("/signup")
     public ResponseEntity signup(@Validated @RequestBody  SignupRequestDto signupRequestDto, BindingResult bindingResult){
@@ -38,8 +39,7 @@ public class UserController {
         }
             return userService.signup(signupRequestDto);
     }
-//    @ApiOperation(value="로그인 테스트", notes="로그인 테스트")
-
+    @ApiOperation(value="로그인 테스트", notes="로그인 테스트")
     @PostMapping("/login")
     public ResponseEntity login(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
