@@ -7,6 +7,7 @@ import com.sparta.board.dto.SecurityExceptionDto;
 import com.sparta.board.security.UserDetailsImpl;
 import com.sparta.board.service.BoardService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class BoardController {
 
     //게시물작성
 //    @ApiOperation(value="게시물 작성 테스트", notes="게시물 작성 테스트")
+    @Operation
     @PostMapping("/boards")
     public BoardResponseDto createBoard
     (@RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -53,6 +55,7 @@ public class BoardController {
 
     //게시물 선택조회
 //    @ApiOperation(value="게시물 선택조회 테스트", notes="게시물 선택조회 테스트")
+    @Operation
     @GetMapping("/boards/{id}")
     public BoardResponseDto searchBoard (@PathVariable Long id) {
         return boardService.searchBoard(id);
@@ -60,17 +63,20 @@ public class BoardController {
 
     //게시물 수정
 //    @ApiOperation(value="게시물 수정 테스트", notes="게시물 수정 테스트")
+    @Operation
     @PutMapping("/boards/{id}")
     public BoardResponseDto update (@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails ){
         return boardService.update(id, boardRequestDto, userDetails.user());
     }
     //게시물 삭제
 //    @ApiOperation(value="게시물 삭제 테스트", notes="게시물 삭제 테스트")
+    @Operation
     @DeleteMapping("/boards/{id}")
     public ResponseEntity<?> delete (@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.delete(id, userDetails.user());
     }
     //게시물 좋아요
+    @Operation
     @PostMapping("/boards/{id}")
     public ResponseEntity<?> HeartBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.updateHeartBoard(id, userDetails.user());

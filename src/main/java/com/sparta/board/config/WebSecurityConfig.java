@@ -78,6 +78,7 @@ public class WebSecurityConfig {
 
         // 사전에 약속된 출처를 명시
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://localhost:8080");
         config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
