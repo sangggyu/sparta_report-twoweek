@@ -1,6 +1,8 @@
 # run_new_was.sh
 
-#!/bin/bash
+#!/usr/bin/env bash
+PROJECT_ROOT="/home/ubuntu/app"
+JAR_FILE="$PROJECT_ROOT/board.jar"
 
 CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0
