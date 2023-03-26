@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController {
 
 
-    @GetMapping("/main")
+    @GetMapping("/health")
     public ModelAndView home() {
         return new ModelAndView("index");
     }
