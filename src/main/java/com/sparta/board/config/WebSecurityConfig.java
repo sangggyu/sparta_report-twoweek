@@ -60,6 +60,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/boards/**").permitAll()
                 .antMatchers("/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/health").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // JWT 인증/인가를 사용하기 위한 설정
